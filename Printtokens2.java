@@ -17,7 +17,7 @@ public class Printtokens2 {
 	static int char_constant = 43;
 	static int comment = 5;
 	
-	// 1
+	// 1 *fault detected, function should return br (no correction yet)
 	/***********************************************/
 	/* NMAE:	open_character_stream          */
 	/* INPUT:       a filename                     */
@@ -40,7 +40,7 @@ public class Printtokens2 {
 			}																	// 12
 		}																		// 13
 																				// 14
-		return null; 															// 15
+		return null; 															// 15 Note: should return br
 	}
 	
 	// 2
