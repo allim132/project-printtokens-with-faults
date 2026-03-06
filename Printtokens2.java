@@ -136,7 +136,7 @@ public class Printtokens2 {
 	   }																		// 28
 	   ch = (char)res;															// 29
 
-	   while (is_token_end(id,res) == false)/* until meet the end character */	// 30
+	   while (is_token_end(id,res) == false)/* until meet the end character */	// 30  Does this really correctly parse until end char? What is end char?
 	   {
 	       sb.append(ch);														// 31
 	       br.mark(4);															// 32
@@ -149,29 +149,29 @@ public class Printtokens2 {
 	 
 	   if(res == -1)       /* if end character is eof token    */				// 39
 	      { unget_char(ch,br);        /* then put back eof on token_stream */	// 40
-	        return sb.toString();												// 50
-	      }																		// 51
+	        return sb.toString();												// 41
+	      }																		// 42
 	 
-	   if(is_spec_symbol(ch)==true)     /* if end character is special_symbol */// 52
-	      { unget_char(ch,br);        /* then put back this character       */	// 53
-	        return sb.toString();												// 54
-	      }																		// 55
-	   if(id==1)                  /* if end character is " and is string */		// 56
-	     {                     													// 57
-	       sb.append(ch);														// 58
-	       return sb.toString(); 												// 59
-	     }																		// 60
-	   if(id==0 && ch==59)														// 61
-	                                   /* when not in string or comment,meet ";"// 62 */
-	     { unget_char(ch,br);       /* then put back this character         */	// 63
-	       return sb.toString(); 												// 64
-	     }																		// 65
-	} catch (IOException e) {													// 66
-		e.printStackTrace();													// 67
-	}																			// 68
+	   if(is_spec_symbol(ch)==true)     /* if end character is special_symbol */// 43
+	      { unget_char(ch,br);        /* then put back this character       */	// 44
+	        return sb.toString();												// 45
+	      }																		// 46
+	   if(id==1)                  /* if end character is " and is string */		// 47
+	     {                     													// 48
+	       sb.append(ch);														// 49
+	       return sb.toString(); 												// 50
+	     }																		// 51
+	   if(id==0 && ch==59)														// 52
+	                                   /* when not in string or comment,meet ";"// 53 */
+	     { unget_char(ch,br);       /* then put back this character         */	// 54
+	       return sb.toString(); 												// 55
+	     }																		// 56
+	} catch (IOException e) {													// 57
+		e.printStackTrace();													// 58
+	}																			// 59
 
-	   return sb.toString();                   /* return nomal case token       // 69      */
-	}																			// 70
+	   return sb.toString();                   /* return nomal case token       // 60      */
+	}																			// 61
 	
 	// 6
 	/*******************************************************/
