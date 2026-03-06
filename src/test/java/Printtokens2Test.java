@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.StringReader;
 
@@ -36,7 +35,6 @@ public class Printtokens2Test {
         assertFalse(Printtokens2.is_keyword("abc"));
     }
 
-
     // -------- is_comment --------
 
     @Test
@@ -48,7 +46,6 @@ public class Printtokens2Test {
     void testIsCommentFalse() {
         assertFalse(Printtokens2.is_comment("abc"));
     }
-
 
     // -------- is_char_constant --------
 
@@ -66,7 +63,6 @@ public class Printtokens2Test {
     void testCharConstantInvalid() {
         assertFalse(Printtokens2.is_char_constant("a"));
     }
-
 
     // -------- is_identifier --------
 
@@ -96,7 +92,6 @@ public class Printtokens2Test {
         assertFalse(Printtokens2.is_identifier("#a"));
     }
 
-
     // -------- is_spec_symbol --------
 
     @Test
@@ -111,7 +106,6 @@ public class Printtokens2Test {
     void testSpecSymbolFalse() {
         assertFalse(Printtokens2.is_spec_symbol('a'));
     }
-
 
     // -------- is_num_constant --------
 
@@ -142,7 +136,6 @@ public class Printtokens2Test {
         assertFalse(Printtokens2.is_num_constant("abc"));
     }
 
-
     // -------- is_str_constant --------
 
     @Test
@@ -165,6 +158,17 @@ public class Printtokens2Test {
         assertEquals(expected, actual);
     }
 
+    // -------- is_token_end --------
+
+    @Test
+    void testIsTokenEndEOF() {
+        assertTrue(Printtokens2.is_token_end(0, -1));
+    }
+
+    @Test
+    void testIsTokenEndNormalChar() {
+        assertFalse(Printtokens2.is_token_end(0, (int) 'a'));
+    }
 
     // -------- token_type --------
 
@@ -198,7 +202,6 @@ public class Printtokens2Test {
         assertEquals(expected, actual);
     }
 
-
     // -------- get_char --------
 
     @Test
@@ -213,6 +216,19 @@ public class Printtokens2Test {
         assertEquals(expected, actual);
     }
 
+    // -------- unget_char --------
+
+    @Test
+    void testUngetChar() {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader br = new BufferedReader(new StringReader("ab"));
+
+        int first = p.get_char(br);
+        p.unget_char(first, br);
+        int second = p.get_char(br);
+
+        assertEquals(first, second);
+    }
 
     // -------- get_token --------
 
@@ -260,7 +276,3 @@ public class Printtokens2Test {
         assertNotNull(actual);
     }
 }
-
-
-    
-
