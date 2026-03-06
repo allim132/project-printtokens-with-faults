@@ -60,7 +60,7 @@ public class Printtokens2 {
 	    return ch;																// 9
 	}													
 	
-	// 3
+	// 3	*fault: does not actually output a character
 	/***************************************************/
 	/* NAME:      unget_char                           */
 	/* INPUT:     a BufferedReader,a character */
