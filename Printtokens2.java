@@ -104,9 +104,9 @@ public class Printtokens2 {
 	/********************************************************/
 	String get_token(BufferedReader br)											// 1
 	{ 																			// 2
-	  int i=0,j;																// 3
+	  int i=0,j;																// 3   What are these used for?
 	  int id=0;																	// 4
-	  int res = 0;																// 5
+	  int res = 0;																// 5   Why is res an int here? -> perhaps this is necessary
 	  char ch = '\0';															// 6
 
 	  StringBuilder sb = new StringBuilder();									// 7
@@ -191,14 +191,14 @@ public class Printtokens2 {
 	    }																		// 10
 
 	 if(str_com_id==2)    /* is comment token */								// 11
-	   { if(ch=='\n' || ch == '\r' || ch=='\t')     /* for comment until meet en// 12 d of line */ 
+	   { if(ch=='\n' || ch == '\r' || ch=='\t')     /* for comment until meet en// 12 d of line */ 	// Why is do comments care for \n, \r, or \t?
 	        return true;														// 13
 	      else																	// 14
 	        return false;														// 15
 	   }																		// 16
 
 	 if(is_spec_symbol(ch)==true) return true; /* is special_symbol? */			// 17
-	 if(ch ==' ' || ch=='\n'|| ch=='\r' || ch==59) return true; 				// 18
+	 if(ch ==' ' || ch=='\n'|| ch=='\r' || ch==59) return true; 				// 18 				// Why checking these characters
 	               
 	 return false;               /* other case,return FALSE */					// 19
 	}
@@ -211,16 +211,16 @@ public class Printtokens2 {
 	/* DESCRIPTION: the integer value is corresponding  */
 	/*              to the different token type         */
 	/****************************************************/
-	static int token_type(String tok)											// 20
-	{ 																			// 21
-	 if(is_keyword(tok))return(keyword);										// 22
-	 if(is_spec_symbol(tok.charAt(0)))return(spec_symbol);						// 23
-	 if(is_identifier(tok))return(identifier);									// 24
-	 if(is_num_constant(tok))return(num_constant);								// 25
-	 if(is_str_constant(tok))return(str_constant);								// 26
-	 if(is_char_constant(tok))return(char_constant);							// 27
-	 if(is_comment(tok))return(comment);										// 28
-	 return(error);                    /* else look as error token */			// 29
+	static int token_type(String tok)											// 1
+	{ 																			// 2
+	 if(is_keyword(tok))return(keyword);										// 3
+	 if(is_spec_symbol(tok.charAt(0)))return(spec_symbol);						// 4
+	 if(is_identifier(tok))return(identifier);									// 5
+	 if(is_num_constant(tok))return(num_constant);								// 6
+	 if(is_str_constant(tok))return(str_constant);								// 7
+	 if(is_char_constant(tok))return(char_constant);							// 8
+	 if(is_comment(tok))return(comment);										// 9
+	 return(error);                    /* else look as error token */			// 10
 	}
 	
 	// 8
