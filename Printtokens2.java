@@ -43,7 +43,7 @@ public class Printtokens2 {
 		return null; 															// 15 Note: should return br
 	}
 	
-	// 2
+	// 2	*fault: on error state, does not actually return -1 on EOF
 	/**********************************************/
 	/* NAME:	get_char                      */
 	/* INPUT:       a BufferedReader      */
