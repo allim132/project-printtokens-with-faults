@@ -88,7 +88,7 @@ public class Printtokens2 {
 	{																			// 2
 		BufferedReader br;														// 3
 	 if(fname.equals(null)) 													// 4
-	    br=open_character_stream(null);									// 5
+	    br=open_character_stream(null);									// 5	Does this really set the standard input device as input source?
 	 else																		// 6
 	    br=open_character_stream(fname);										// 7
 	 return br;																	// 8
