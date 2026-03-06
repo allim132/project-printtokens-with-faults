@@ -126,8 +126,8 @@ public class Printtokens2 {
 	   if(res == -1)return null;												// 19
 	   sb.append(ch);															// 20
 	   if(is_spec_symbol(ch)==true)return sb.toString(); 						// 21
-	   if(ch =='"')id=2;    /* prepare for string */  							// 22
-	   if(ch ==59)id=1;    /* prepare for comment */    						// 23
+	   if(ch =='"')id=2;    /* prepare for string */  							// 22  Are these exhausted of all the cases?
+	   if(ch ==59)id=1;    /* prepare for comment */    						// 23  Are these exhausted of all the cases?
 	   
 	   res = get_char(br);														// 24
 	   if (res == -1) {															// 25
