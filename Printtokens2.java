@@ -26,21 +26,21 @@ public class Printtokens2 {
 	/*              open stdin,otherwise open      */
 	/*              the existed file               */
 	/***********************************************/
-	BufferedReader open_character_stream(String fname) {
-		BufferedReader br = null;
-		if (fname == null) {
-			br = new BufferedReader(new InputStreamReader(System.in));
-		} else {
-			try {
-				FileReader fr = new FileReader(fname);
-				br = new BufferedReader(fr);
-			} catch (FileNotFoundException e) {
-				System.out.print("The file " + fname +" doesn't exists\n");
-				e.printStackTrace();
-			}
-		}
-		
-		return null; 
+	BufferedReader open_character_stream(String fname) {						// 1
+		BufferedReader br = null;												// 2
+		if (fname == null) {													// 3
+			br = new BufferedReader(new InputStreamReader(System.in));			// 4
+		} else {																// 5
+			try {																// 6
+				FileReader fr = new FileReader(fname);							// 7
+				br = new BufferedReader(fr);									// 8
+			} catch (FileNotFoundException e) {									// 9
+				System.out.print("The file " + fname +" doesn't exists\n");		// 10
+				e.printStackTrace();											// 11
+			}																	// 12
+		}																		// 13
+																				// 14
+		return null; 															// 15
 	}
 	
 	// 2
@@ -49,16 +49,16 @@ public class Printtokens2 {
 	/* INPUT:       a BufferedReader      */
 	/* OUTPUT:      a character (f2,remove"when EOF, return -1" in the comment) */
 	/**********************************************/
-	int get_char(BufferedReader br){ 
-            int ch = 0;
-	    try {
-	    	br.mark(3); 
-		ch= br.read();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	    return ch;
-	}
+	int get_char(BufferedReader br){ 											// 1
+            int ch = 0;															// 2
+	    try {																	// 3
+	    	br.mark(3); 														// 4
+		ch= br.read();															// 5
+		} catch (IOException e) {												// 6
+			e.printStackTrace();												// 7
+		}																		// 8
+	    return ch;																// 9
+	}													
 	
 	// 3
 	/***************************************************/
@@ -67,14 +67,14 @@ public class Printtokens2 {
 	/* OUTPUT:    a character                          */
 	/* DESCRIPTION: move backward  */
 	/***************************************************/
-	char unget_char (int ch,BufferedReader br) { 
-	  try {
-		br.reset();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-		 return 0;
-	}
+	char unget_char (int ch,BufferedReader br) { 								// 1
+	  try {																		// 2
+		br.reset();																// 3 
+	} catch (IOException e) {													// 4
+		e.printStackTrace();													// 5
+	}																			// 6
+		 return 0;																// 7
+	}		
 	
 	// 4
 	/********************************************************/
@@ -84,14 +84,14 @@ public class Printtokens2 {
 	/* DESCRIPTION: when filename is EMPTY,choice standard  */
 	/*              input device as input source            */
 	/********************************************************/
-	BufferedReader open_token_stream(String fname)
-	{
-		BufferedReader br;
-	 if(fname.equals(null)) 
-	    br=open_character_stream(null);
-	 else
-	    br=open_character_stream(fname);
-	 return br;
+	BufferedReader open_token_stream(String fname)								// 1
+	{																			// 2
+		BufferedReader br;														// 3
+	 if(fname.equals(null)) 													// 4
+	    br=open_character_stream(null);									// 5
+	 else																		// 6
+	    br=open_character_stream(fname);										// 7
+	 return br;																	// 8
 	}
 	
 	// 5
@@ -102,76 +102,76 @@ public class Printtokens2 {
 	/* DESCRIPTION: according the syntax of tokens,dealing  */
 	/*              with different case  and get one token  */
 	/********************************************************/
-	String get_token(BufferedReader br)
-	{ 
-	  int i=0,j;
-	  int id=0;
-	  int res = 0;
-	  char ch = '\0';
-	 
-	  StringBuilder sb = new StringBuilder();
+	String get_token(BufferedReader br)											// 1
+	{ 																			// 2
+	  int i=0,j;																// 3
+	  int id=0;																	// 4
+	  int res = 0;																// 5
+	  char ch = '\0';															// 6
 
-	   try {
-		   res = get_char(br);
-		   if (res == -1) {
-			   return null;
-		   }
-		   ch = (char)res;
-		while(ch=='\t'||ch=='\n' || ch == '\r')     /* strip all blanks until meet characters */  
-	      {
-			res = get_char(br);
-			ch = (char)res;
-	      } 
-	   
-	   if(res == -1)return null;
-	   sb.append(ch);
-	   if(is_spec_symbol(ch)==true)return sb.toString(); 
-	   if(ch =='"')id=2;    /* prepare for string */  
-	   if(ch ==59)id=1;    /* prepare for comment */    
-	   
-	   res = get_char(br);
-	   if (res == -1) {
-		   unget_char(ch,br);
-		   return sb.toString();
-	   }
-	   ch = (char)res;
+	  StringBuilder sb = new StringBuilder();									// 7
 
-	   while (is_token_end(id,res) == false)/* until meet the end character */
+	   try {																	// 8
+		   res = get_char(br);													// 9
+		   if (res == -1) {														// 10
+			   return null;														// 11
+		   }																	// 12
+		   ch = (char)res;														// 13
+		while(ch=='\t'||ch=='\n' || ch == '\r')     /* strip all blanks until meet characters */ // 14  
+	      {																		// 15
+			res = get_char(br);													// 16
+			ch = (char)res;														// 17
+	      } 																	// 18
+	   
+	   if(res == -1)return null;												// 19
+	   sb.append(ch);															// 20
+	   if(is_spec_symbol(ch)==true)return sb.toString(); 						// 21
+	   if(ch =='"')id=2;    /* prepare for string */  							// 22
+	   if(ch ==59)id=1;    /* prepare for comment */    						// 23
+	   
+	   res = get_char(br);														// 24
+	   if (res == -1) {															// 25
+		   unget_char(ch,br);													// 26
+		   return sb.toString();												// 27
+	   }																		// 28
+	   ch = (char)res;															// 29
+
+	   while (is_token_end(id,res) == false)/* until meet the end character */	// 30
 	   {
-	       sb.append(ch);
-	       br.mark(4);
-	       res = get_char(br);
-		   if (res == -1) {
-			   break;
-		   }
-		   ch = (char)res;
-	   }
+	       sb.append(ch);														// 31
+	       br.mark(4);															// 32
+	       res = get_char(br);													// 33
+		   if (res == -1) {														// 34
+			   break;															// 35
+		   }																	// 36
+		   ch = (char)res;														// 37
+	   }																		// 38
 	 
-	   if(res == -1)       /* if end character is eof token    */
-	      { unget_char(ch,br);        /* then put back eof on token_stream */
-	        return sb.toString();
-	      }
+	   if(res == -1)       /* if end character is eof token    */				// 39
+	      { unget_char(ch,br);        /* then put back eof on token_stream */	// 40
+	        return sb.toString();												// 50
+	      }																		// 51
 	 
-	   if(is_spec_symbol(ch)==true)     /* if end character is special_symbol */
-	      { unget_char(ch,br);        /* then put back this character       */
-	        return sb.toString();
-	      }
-	   if(id==1)                  /* if end character is " and is string */
-	     {                     
-	       sb.append(ch);
-	       return sb.toString(); 
-	     }
-	   if(id==0 && ch==59)
-	                                   /* when not in string or comment,meet ";" */
-	     { unget_char(ch,br);       /* then put back this character         */
-	       return sb.toString(); 
-	     }
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-	   
-	   return sb.toString();                   /* return nomal case token             */
-	}
+	   if(is_spec_symbol(ch)==true)     /* if end character is special_symbol */// 52
+	      { unget_char(ch,br);        /* then put back this character       */	// 53
+	        return sb.toString();												// 54
+	      }																		// 55
+	   if(id==1)                  /* if end character is " and is string */		// 56
+	     {                     													// 57
+	       sb.append(ch);														// 58
+	       return sb.toString(); 												// 59
+	     }																		// 60
+	   if(id==0 && ch==59)														// 61
+	                                   /* when not in string or comment,meet ";"// 62 */
+	     { unget_char(ch,br);       /* then put back this character         */	// 63
+	       return sb.toString(); 												// 64
+	     }																		// 65
+	} catch (IOException e) {													// 66
+		e.printStackTrace();													// 67
+	}																			// 68
+
+	   return sb.toString();                   /* return nomal case token       // 69      */
+	}																			// 70
 	
 	// 6
 	/*******************************************************/
@@ -179,28 +179,28 @@ public class Printtokens2 {
 	/* INPUT:       a character,a token status             */
 	/* OUTPUT:	a BOOLEAN value                        */
 	/*******************************************************/
-	static boolean is_token_end(int str_com_id, int res)
-	{
-	 if(res==-1)return(true); /* is eof token? */
-	 char ch = (char)res;
-	 if(str_com_id==1)          /* is string token */
-	    { if(ch=='"' | ch=='\n' || ch == '\r')   /* for string until meet another " */
-	         return true;
-	      else
-	         return false;
-	    }
+	static boolean is_token_end(int str_com_id, int res)						// 1
+	{																			// 2
+	 if(res==-1)return(true); /* is eof token? */								// 3
+	 char ch = (char)res;														// 4
+	 if(str_com_id==1)          /* is string token */							// 5
+	    { if(ch=='"' | ch=='\n' || ch == '\r')   /* for string until meet anothe// 6 r " */
+	         return true;														// 7
+	      else																	// 8
+	         return false;														// 9
+	    }																		// 10
 
-	 if(str_com_id==2)    /* is comment token */
-	   { if(ch=='\n' || ch == '\r' || ch=='\t')     /* for comment until meet end of line */ 
-	        return true;
-	      else
-	        return false;
-	   }
+	 if(str_com_id==2)    /* is comment token */								// 11
+	   { if(ch=='\n' || ch == '\r' || ch=='\t')     /* for comment until meet en// 12 d of line */ 
+	        return true;														// 13
+	      else																	// 14
+	        return false;														// 15
+	   }																		// 16
 
-	 if(is_spec_symbol(ch)==true) return true; /* is special_symbol? */
-	 if(ch ==' ' || ch=='\n'|| ch=='\r' || ch==59) return true; 
+	 if(is_spec_symbol(ch)==true) return true; /* is special_symbol? */			// 17
+	 if(ch ==' ' || ch=='\n'|| ch=='\r' || ch==59) return true; 				// 18
 	               
-	 return false;               /* other case,return FALSE */
+	 return false;               /* other case,return FALSE */					// 19
 	}
 	
 	// 7
@@ -211,16 +211,16 @@ public class Printtokens2 {
 	/* DESCRIPTION: the integer value is corresponding  */
 	/*              to the different token type         */
 	/****************************************************/
-	static int token_type(String tok)
-	{ 
-	 if(is_keyword(tok))return(keyword);
-	 if(is_spec_symbol(tok.charAt(0)))return(spec_symbol);
-	 if(is_identifier(tok))return(identifier);
-	 if(is_num_constant(tok))return(num_constant);
-	 if(is_str_constant(tok))return(str_constant);
-	 if(is_char_constant(tok))return(char_constant);
-	 if(is_comment(tok))return(comment);
-	 return(error);                    /* else look as error token */
+	static int token_type(String tok)											// 20
+	{ 																			// 21
+	 if(is_keyword(tok))return(keyword);										// 22
+	 if(is_spec_symbol(tok.charAt(0)))return(spec_symbol);						// 23
+	 if(is_identifier(tok))return(identifier);									// 24
+	 if(is_num_constant(tok))return(num_constant);								// 25
+	 if(is_str_constant(tok))return(str_constant);								// 26
+	 if(is_char_constant(tok))return(char_constant);							// 27
+	 if(is_comment(tok))return(comment);										// 28
+	 return(error);                    /* else look as error token */			// 29
 	}
 	
 	// 8
@@ -228,36 +228,36 @@ public class Printtokens2 {
 	/* NAME:	print_token                             */
 	/* INPUT:	a token                                 */
 	/****************************************************/
-	void print_token(String tok)
-	{ int type;
-	  type=token_type(tok);
-	 if(type==error)
-	   { 
-	   	System.out.print("error,\"" + tok + "\".\n");
-	   }
+	void print_token(String tok)												// 1
+	{ int type;																	// 2
+	  type=token_type(tok);														// 3
+	 if(type==error)															// 4
+	   { 																		// 5
+	   	System.out.print("error,\"" + tok + "\".\n");							// 6
+	   }																		// 7
 	   
-	 if(type==keyword)
-	   {
-	   System.out.print("keyword,\"" + tok + "\".\n");
-	   }
-	  
-	 if(type==spec_symbol)print_spec_symbol(tok);
-	 if(type==identifier)
-	   {
-	   System.out.print("identifier,\"" + tok + "\".\n");
-	   }
-	 if(type==num_constant)
-	   {
-	   System.out.print("numeric," + tok + ".\n");
-	   }
+	 if(type==keyword)															// 8
+	   {																		// 9
+	   System.out.print("keyword,\"" + tok + "\".\n");							// 10
+	   }																		// 11
+
+	 if(type==spec_symbol)print_spec_symbol(tok); 								// 12
+	 if(type==identifier)														// 13
+	   {																		// 14
+	   System.out.print("identifier,\"" + tok + "\".\n");						// 15
+	   }																		// 16
+	 if(type==num_constant)														// 17
+	   {																		// 18
+	   System.out.print("numeric," + tok + ".\n");								// 19
+	   }																		// 20
 
 	 
-	 if(type==char_constant)
-	   {
-	    System.out.print("character,\"" + tok.charAt(1) + "\".\n");
-	   }
+	 if(type==char_constant)													// 21
+	   {																		// 22
+	    System.out.print("character,\"" + tok.charAt(1) + "\".\n");				// 23
+	   }																		// 24
 
-	   }
+	   }																		// 25
 
 	/* the code for tokens judgment function */
 
@@ -267,13 +267,13 @@ public class Printtokens2 {
 	/* INPUT: 	a token */
 	/* OUTPUT:      a BOOLEAN value      */
 	/*************************************/
-	static boolean is_comment(String ident)
-	{
-	  if( ident.charAt(0) ==59 )   /* the char is 59   */
-	     return true;
-	  else
-	     return false;
-	}
+	static boolean is_comment(String ident)										// 1
+	{																			// 2
+	  if( ident.charAt(0) ==59 )   /* the char is 59   */						// 3
+	     return true;															// 4
+	  else																		// 5
+	     return false;															// 6
+	}																			// 7
 	
 	// 10
 	/*************************************/
