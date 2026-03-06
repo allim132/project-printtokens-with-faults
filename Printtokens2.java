@@ -223,7 +223,7 @@ public class Printtokens2 {
 	 return(error);                    /* else look as error token */			// 10
 	}
 	
-	// 8
+	// 8	// I would personally add a final type check for illegal types. Otherwise it literally prints nothing
 	/****************************************************/
 	/* NAME:	print_token                             */
 	/* INPUT:	a token                                 */
