@@ -52,8 +52,8 @@ public class Printtokens2 {
 	int get_char(BufferedReader br){ 											// 1
             int ch = 0;															// 2
 	    try {																	// 3
-	    	br.mark(3); 														// 4
-		ch= br.read();															// 5
+	    	br.mark(3); 														// 4 why is line 6 not in the try clause?
+		ch= br.read();															// 5 what's going on over here?
 		} catch (IOException e) {												// 6
 			e.printStackTrace();												// 7
 		}																		// 8
