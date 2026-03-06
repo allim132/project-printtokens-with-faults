@@ -269,7 +269,7 @@ public class Printtokens2 {
 	/*************************************/
 	static boolean is_comment(String ident)										// 1
 	{																			// 2
-	  if( ident.charAt(0) ==59 )   /* the char is 59   */						// 3
+	  if( ident.charAt(0) ==59 )   /* the char is 59   */						// 3  		// Why is it checking char 59 which is a ; for if something is a comment?
 	     return true;															// 4
 	  else																		// 5
 	     return false;															// 6
