@@ -273,7 +273,7 @@ public class Printtokens2 {
 	/*************************************/
 	static boolean is_keyword(String str)
 	{ 
-	 if (str.equals("and") || str.equals("or") || str.equals("if") ||
+	if (str.equals("and") || str.equals("or") || str.equals("if") ||
 			 str.equals("xor")||str.equals("lambda")||str.equals("=>"))
 	      return true;
 	  else 

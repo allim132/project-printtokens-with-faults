@@ -1,4 +1,6 @@
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,15 +26,56 @@ public class Printtokens2Test {
 
     @Test
     void testIsKeywordTrue() {
-        assertTrue(Printtokens2.is_keyword("and"));
-        assertTrue(Printtokens2.is_keyword("or"));
-        assertTrue(Printtokens2.is_keyword("if"));
+        String input1 = "and";
+        boolean expected1 = true;
+        boolean actual1 = Printtokens2.is_keyword(input1);
+        printTestResult("testIsKeywordTrue_and", input1, expected1, actual1);
+        assertEquals(expected1, actual1);
+
+        String input2 = "or";
+        boolean expected2 = true;
+        boolean actual2 = Printtokens2.is_keyword(input2);
+        printTestResult("testIsKeywordTrue_or", input2, expected2, actual2);
+        assertEquals(expected2, actual2);
+
+        String input3 = "if";
+        boolean expected3 = true;
+        boolean actual3 = Printtokens2.is_keyword(input3);
+        printTestResult("testIsKeywordTrue_if", input3, expected3, actual3);
+        assertEquals(expected3, actual3);
+
+        String input4 = "xor";
+        boolean expected4 = true;
+        boolean actual4 = Printtokens2.is_keyword(input4);
+        printTestResult("testIsKeywordTrue_xor", input4, expected4, actual4);
+        assertEquals(expected4, actual4);
+
+        String input5 = "lambda";
+        boolean expected5 = true;
+        boolean actual5 = Printtokens2.is_keyword(input5);
+        printTestResult("testIsKeywordTrue_lambda", input5, expected5, actual5);
+        assertEquals(expected5, actual5);
+
+        String input6 = "=>";
+        boolean expected6 = true;
+        boolean actual6 = Printtokens2.is_keyword(input6);
+        printTestResult("testIsKeywordTrue_=>", input6, expected6, actual6);
+        assertEquals(expected6, actual6);
     }
 
     @Test
     void testIsKeywordFalse() {
-        assertFalse(Printtokens2.is_keyword("hello"));
-        assertFalse(Printtokens2.is_keyword("abc"));
+        String input1 = "hello";
+        boolean expected1 = false;
+        boolean actual1 = Printtokens2.is_keyword(input1);
+        printTestResult("testIsKeywordFalse_hello", input1, expected1, actual1);
+        assertEquals(expected1, actual1);
+
+        String input2 = "abc";
+        boolean expected2 = false;
+        boolean actual2 = Printtokens2.is_keyword(input2);
+        printTestResult("testIsKeywordFalse_abc", input2, expected2, actual2);
+        assertEquals(expected2, actual2);
     }
 
     // -------- is_comment --------
@@ -244,6 +287,7 @@ public class Printtokens2Test {
         assertEquals(expected, actual);
     }
 
+
     // -------- optional extra useful tests --------
 
     @Test
@@ -274,5 +318,86 @@ public class Printtokens2Test {
         );
 
         assertNotNull(actual);
+    }
+
+    // -------- unget_error --------
+
+    @Test
+    void testUngetError() {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader br = new BufferedReader(new StringReader("test"));
+        // Simple test: just call the function to ensure it doesn't crash
+        Printtokens2.unget_error(br);
+    }
+
+    // -------- print_spec_symbol --------
+
+    @Test
+    void testPrintSpecSymbol() {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        
+        try {
+            // Test {
+            System.setOut(new PrintStream(outputStream));
+            Printtokens2.print_spec_symbol("{");
+            String actual1 = outputStream.toString();
+            String expected1 = "lparen.\n";
+            System.setOut(originalOut);
+            printTestResult("testPrintSpecSymbol_{", "{", expected1, actual1);
+            assertEquals(expected1, actual1);
+            outputStream.reset();
+
+            // Test )
+            System.setOut(new PrintStream(outputStream));
+            Printtokens2.print_spec_symbol(")");
+            String actual2 = outputStream.toString();
+            String expected2 = "rparen.\n";
+            System.setOut(originalOut);
+            printTestResult("testPrintSpecSymbol_)", ")", expected2, actual2);
+            assertEquals(expected2, actual2);
+            outputStream.reset();
+
+            // Test [
+            System.setOut(new PrintStream(outputStream));
+            Printtokens2.print_spec_symbol("[");
+            String actual3 = outputStream.toString();
+            String expected3 = "lsquare.\n";
+            System.setOut(originalOut);
+            printTestResult("testPrintSpecSymbol_[", "[", expected3, actual3);
+            assertEquals(expected3, actual3);
+            outputStream.reset();
+
+            // Test ]
+            System.setOut(new PrintStream(outputStream));
+            Printtokens2.print_spec_symbol("]");
+            String actual4 = outputStream.toString();
+            String expected4 = "rsquare.\n";
+            System.setOut(originalOut);
+            printTestResult("testPrintSpecSymbol_]", "]", expected4, actual4);
+            assertEquals(expected4, actual4);
+            outputStream.reset();
+
+            // Test '
+            System.setOut(new PrintStream(outputStream));
+            Printtokens2.print_spec_symbol("'");
+            String actual5 = outputStream.toString();
+            String expected5 = "quote.\n";
+            System.setOut(originalOut);
+            printTestResult("testPrintSpecSymbol_'", "'", expected5, actual5);
+            assertEquals(expected5, actual5);
+            outputStream.reset();
+
+            // Test `
+            System.setOut(new PrintStream(outputStream));
+            Printtokens2.print_spec_symbol("`");
+            String actual6 = outputStream.toString();
+            String expected6 = "bquote.\n";
+            System.setOut(originalOut);
+            printTestResult("testPrintSpecSymbol_`", "`", expected6, actual6);
+            assertEquals(expected6, actual6);
+        } finally {
+            System.setOut(originalOut);
+        }
     }
 }
