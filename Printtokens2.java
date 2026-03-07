@@ -56,10 +56,14 @@ public class Printtokens2 {
 		ch= br.read();															// 5 what's going on over here?
 		} catch (IOException e) {												// 6
 			e.printStackTrace();												// 7
+			return -1;															// 7.5, code correction
 		}																		// 8
 	    return ch;																// 9
 	}													
 	
+	
+}
+
 	// 3	*fault: does not actually output a character
 	/***************************************************/
 	/* NAME:      unget_char                           */
