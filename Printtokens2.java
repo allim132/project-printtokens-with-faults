@@ -77,7 +77,7 @@ public class Printtokens2 {
 	} catch (IOException e) {													// 4
 		e.printStackTrace();													// 5
 	}																			// 6
-		 return 0;																// 7
+		 return (char)ch;																// 7	code correction applied
 	}		
 	
 	// 4
