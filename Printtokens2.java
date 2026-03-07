@@ -108,12 +108,14 @@ public class Printtokens2 {
 	/********************************************************/
 	String get_token(BufferedReader br)											// 1
 	{ 																			// 2
-	  int i=0,j;																// 3   What are these used for?
+	  // int i=0,j;																// 3   What are these used for? 	fault correction
 	  int id=0;																	// 4
 	  int res = 0;																// 5   Why is res an int here? -> perhaps this is necessary
 	  char ch = '\0';															// 6
 
 	  StringBuilder sb = new StringBuilder();									// 7
+
+
 
 	   try {																	// 8
 		   res = get_char(br);													// 9
@@ -132,10 +134,10 @@ public class Printtokens2 {
 	   if(is_spec_symbol(ch)==true)return sb.toString(); 						// 21
 	   if(ch =='"')id=2;    /* prepare for string */  							// 22  Are these exhausted of all the cases?
 	   if(ch ==59)id=1;    /* prepare for comment */    						// 23  Are these exhausted of all the cases?
-	   
+
 	   res = get_char(br);														// 24
 	   if (res == -1) {															// 25
-		   unget_char(ch,br);													// 26
+		   //unget_char(ch,br);													// 26	fault correction: -1 implies that we've reach EOF, but we still get the char, thus we must remove this code
 		   return sb.toString();												// 27
 	   }																		// 28
 	   ch = (char)res;															// 29
@@ -152,7 +154,7 @@ public class Printtokens2 {
 	   }																		// 38
 	 
 	   if(res == -1)       /* if end character is eof token    */				// 39
-	      { unget_char(ch,br);        /* then put back eof on token_stream */	// 40
+	      { //unget_char(ch,br);        /* then put back eof on token_stream */	// 40	fault correction: -1 implies EOF, and ch is a char and chars cannot store EOF
 	        return sb.toString();												// 41
 	      }																		// 42
 	 
