@@ -56,7 +56,7 @@ public class Printtokens2 {
 		ch= br.read();															// 5 what's going on over here?
 		} catch (IOException e) {												// 6
 			e.printStackTrace();												// 7
-			return -1;															// 7.5, code correction
+			return -1;															// 7.5, code correction, returns -1 on IOException
 		}																		// 8
 	    return ch;																// 9
 	}													
@@ -77,7 +77,7 @@ public class Printtokens2 {
 	} catch (IOException e) {													// 4
 		e.printStackTrace();													// 5
 	}																			// 6
-		 return (char)ch;																// 7	code correction applied
+		 return (char)ch;																// 7	code correction applied, now returns char 
 	}		
 	
 	// 4
@@ -91,7 +91,7 @@ public class Printtokens2 {
 	BufferedReader open_token_stream(String fname)								// 1
 	{																			// 2
 		BufferedReader br;														// 3
-	 if(fname.equals(null)) 													// 4
+	 if(fname == null || fname.isEmpty()) 													// 4	fault correction applied, correct null comparison and empty correct empty check
 	    br=open_character_stream(null);									// 5	Does this really set the standard input device as input source?
 	 else																		// 6
 	    br=open_character_stream(fname);										// 7
