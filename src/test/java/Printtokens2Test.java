@@ -1,5 +1,8 @@
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 
@@ -290,16 +293,66 @@ public class Printtokens2Test {
 
     // -------- optional extra useful tests --------
 
+    // -------- open_character_stream --------------
+
+    @Test
+    void testOpenCharacterStreamExistingFile() throws IOException {
+        Printtokens2 p = new Printtokens2();
+
+        // create a temporary file
+        File tempFile = File.createTempFile("testfile", ".txt");
+
+        // write something into the file
+        FileWriter writer = new FileWriter(tempFile);
+        writer.write("test");
+        writer.close();
+
+        BufferedReader actual = p.open_character_stream(tempFile.getAbsolutePath());
+
+        printTestResult(
+            "testOpenCharacterStreamExistingFile",
+            tempFile.getAbsolutePath(),
+            "non-null BufferedReader",
+            actual == null ? "null" : "non-null BufferedReader"
+        );
+
+        assertNotNull(actual);
+
+        // cleanup
+        tempFile.delete();
+    }
+
+    @Test
+    void testOpenCharacterStreamMissingFile() {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader actual = p.open_character_stream("missing_file.txt");
+
+        String actualStatus = (actual != null) ? "non-null BufferedReader" : "null";
+        String expectedStatus = "null";
+
+        printTestResult(
+            "testOpenCharacterStreamMissingFile",
+            "missing_file.txt",
+            expectedStatus,
+            actualStatus
+        );
+
+        assertEquals(null, actual);
+    }
+
     @Test
     void testOpenCharacterStreamNull() {
         Printtokens2 p = new Printtokens2();
         BufferedReader actual = p.open_character_stream(null);
 
+        String actualStatus = (actual != null) ? "non-null BufferedReader" : "null";
+        String expectedStatus = "non-null BufferedReader";
+
         printTestResult(
             "testOpenCharacterStreamNull",
             "null filename",
-            "non-null BufferedReader",
-            actual
+            expectedStatus,
+            actualStatus
         );
 
         assertNotNull(actual);
@@ -310,11 +363,14 @@ public class Printtokens2Test {
         Printtokens2 p = new Printtokens2();
         BufferedReader actual = p.open_token_stream("");
 
+        String actualStatus = (actual != null) ? "non-null BufferedReader" : "null";
+        String expectedStatus = "non-null BufferedReader";
+
         printTestResult(
             "testOpenTokenStreamEmpty",
             "\"\"",
-            "non-null BufferedReader",
-            actual
+            expectedStatus,
+            actualStatus
         );
 
         assertNotNull(actual);
