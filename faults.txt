@@ -1,0 +1,11 @@
+All the faults and their corrections are indicated in the source code. This is just a compilation of how many faults were fixed per function.
+
+Function 1: "open_character_stream" - 1 fault
+Function 2: "open_char" - 1 fault
+Function 3: "unget_char" - 1 fault
+Function 4: "open_token_stream" - 1 fault
+Function 5: "get_token" - 3 faults
+Function 6: "is_token_end" - 1 fault
+Function 7: "token_type" - 0 fault
+Function 8: "print_token" - 2 faults
+Function 9: "is_comment" - 0 faults
