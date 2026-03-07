@@ -40,7 +40,7 @@ public class Printtokens2 {
 			}																	// 12
 		}																		// 13
 																				// 14
-		return br; 															// 15 Note: should return br
+		return br; 															// 15 Note: fault correction: should return br
 	}
 	
 	// 2	*fault: on error state, does not actually return -1 on EOF

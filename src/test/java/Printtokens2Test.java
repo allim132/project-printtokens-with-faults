@@ -86,12 +86,36 @@ public class Printtokens2Test {
 
     @Test
     void testIsCommentTrue() {
-        assertTrue(Printtokens2.is_comment(";this is a comment"));
+        String input1 = ";comment";
+        boolean expected1 = true;
+        boolean actual1 = Printtokens2.is_comment(input1);
+
+        printTestResult("testIsCommentTrue_;comment", input1, expected1, actual1);
+        assertEquals(expected1, actual1);
+
+        String input2 = ";x";
+        boolean expected2 = true;
+        boolean actual2 = Printtokens2.is_comment(input2);
+
+        printTestResult("testIsCommentTrue_;x", input2, expected2, actual2);
+        assertEquals(expected2, actual2);
     }
 
     @Test
     void testIsCommentFalse() {
-        assertFalse(Printtokens2.is_comment("abc"));
+        String input1 = "abc";
+        boolean expected1 = false;
+        boolean actual1 = Printtokens2.is_comment(input1);
+
+        printTestResult("testIsCommentFalse_abc", input1, expected1, actual1);
+        assertEquals(expected1, actual1);
+
+        String input2 = "123";
+        boolean expected2 = false;
+        boolean actual2 = Printtokens2.is_comment(input2);
+
+        printTestResult("testIsCommentFalse_123", input2, expected2, actual2);
+        assertEquals(expected2, actual2);
     }
 
     // -------- is_char_constant --------
@@ -790,6 +814,160 @@ public class Printtokens2Test {
         BufferedReader br = new BufferedReader(new StringReader("test"));
         // Simple test: just call the function to ensure it doesn't crash
         Printtokens2.unget_error(br);
+    }
+
+    // -------- print_token --------
+
+    @Test
+    void testPrintTokenError() {
+        Printtokens2 p = new Printtokens2();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+
+        try {
+            System.setOut(new PrintStream(outputStream));
+            p.print_token("@");
+            String actual = outputStream.toString();
+            String expected = "error,\"@\".\n";
+
+            printTestResult("testPrintTokenError", "@", expected, actual);
+            assertEquals(expected, actual);
+        } finally {
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    void testPrintTokenKeyword() {
+        Printtokens2 p = new Printtokens2();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+
+        try {
+            System.setOut(new PrintStream(outputStream));
+            p.print_token("if");
+            String actual = outputStream.toString();
+            String expected = "keyword,\"if\".\n";
+
+            printTestResult("testPrintTokenKeyword", "if", expected, actual);
+            assertEquals(expected, actual);
+        } finally {
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    void testPrintTokenSpecSymbol() {
+        Printtokens2 p = new Printtokens2();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+
+        try {
+            System.setOut(new PrintStream(outputStream));
+            p.print_token("(");
+            String actual = outputStream.toString();
+            String expected = "lparen.\n"; // adjust if your print_spec_symbol differs
+
+            printTestResult("testPrintTokenSpecSymbol", "(", expected, actual);
+            assertEquals(expected, actual);
+        } finally {
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    void testPrintTokenIdentifier() {
+        Printtokens2 p = new Printtokens2();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+
+        try {
+            System.setOut(new PrintStream(outputStream));
+            p.print_token("myVar");
+            String actual = outputStream.toString();
+            String expected = "identifier,\"myVar\".\n";
+
+            printTestResult("testPrintTokenIdentifier", "myVar", expected, actual);
+            assertEquals(expected, actual);
+        } finally {
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    void testPrintTokenNumber() {
+        Printtokens2 p = new Printtokens2();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+
+        try {
+            System.setOut(new PrintStream(outputStream));
+            p.print_token("123");
+            String actual = outputStream.toString();
+            String expected = "numeric,123.\n";
+
+            printTestResult("testPrintTokenNumber", "123", expected, actual);
+            assertEquals(expected, actual);
+        } finally {
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    void testPrintTokenString() {
+        Printtokens2 p = new Printtokens2();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+
+        try {
+            System.setOut(new PrintStream(outputStream));
+            p.print_token("\"hello\"");
+            String actual = outputStream.toString();
+            String expected = "string,\"hello\".\n";
+
+            printTestResult("testPrintTokenString", "\"hello\"", expected, actual);
+            assertEquals(expected, actual);
+        } finally {
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    void testPrintTokenChar() {
+        Printtokens2 p = new Printtokens2();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+
+        try {
+            System.setOut(new PrintStream(outputStream));
+            p.print_token("#a");
+            String actual = outputStream.toString();
+            String expected = "character,\"a\".\n";
+
+            printTestResult("testPrintTokenChar", "#a", expected, actual);
+            assertEquals(expected, actual);
+        } finally {
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    void testPrintTokenComment() {
+        Printtokens2 p = new Printtokens2();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+
+        try {
+            System.setOut(new PrintStream(outputStream));
+            p.print_token(";comment");
+            String actual = outputStream.toString();
+            String expected = "comment,;comment.\n";
+
+            printTestResult("testPrintTokenComment", ";comment", expected, actual);
+            assertEquals(expected, actual);
+        } finally {
+            System.setOut(originalOut);
+        }
     }
 
     // -------- print_spec_symbol --------
