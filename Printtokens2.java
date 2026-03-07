@@ -190,7 +190,7 @@ public class Printtokens2 {
 	 if(res==-1)return(true); /* is eof token? */								// 3
 	 char ch = (char)res;														// 4
 	 if(str_com_id==1)          /* is string token */							// 5
-	    { if(ch=='"' | ch=='\n' || ch == '\r')   /* for string until meet anothe// 6 r " */
+	    { if(ch=='"' || ch=='\n' || ch == '\r')   /* for string until meet anothe// 6 r " */	// fault correction: single |, changed to ||
 	         return true;														// 7
 	      else																	// 8
 	         return false;														// 9
