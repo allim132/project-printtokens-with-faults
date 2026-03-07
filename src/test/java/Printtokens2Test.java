@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Reader;
 import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -251,29 +252,118 @@ public class Printtokens2Test {
     // -------- get_char --------
 
     @Test
-    void testGetChar() {
+    void testGetCharNormal() {
         Printtokens2 p = new Printtokens2();
         BufferedReader br = new BufferedReader(new StringReader("a"));
 
         int expected = (int) 'a';
         int actual = p.get_char(br);
 
-        printTestResult("testGetChar", "reader containing \"a\"", expected, actual);
+        printTestResult("testGetCharNormal", "reader containing \"a\"", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetCharEOF() {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader br = new BufferedReader(new StringReader(""));
+
+        int expected = -1;
+        int actual = p.get_char(br);
+
+        printTestResult("testGetCharEOF", "empty reader", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetCharIOException() {
+        Printtokens2 p = new Printtokens2();
+
+        Reader badReader = new Reader() {
+            @Override
+            public int read(char[] cbuf, int off, int len) throws IOException {
+                throw new IOException("forced read failure");
+            }
+
+            @Override
+            public void close() throws IOException {
+            }
+        };
+
+        BufferedReader br = new BufferedReader(badReader);
+
+        int expected = -1;
+        int actual = p.get_char(br);
+
+        printTestResult("testGetCharIOException", "reader that throws IOException", expected, actual);
         assertEquals(expected, actual);
     }
 
     // -------- unget_char --------
 
     @Test
-    void testUngetChar() {
+    void testUngetCharReturnA() throws IOException {
         Printtokens2 p = new Printtokens2();
-        BufferedReader br = new BufferedReader(new StringReader("ab"));
+        BufferedReader br = new BufferedReader(new StringReader("A"));
 
-        int first = p.get_char(br);
-        p.unget_char(first, br);
-        int second = p.get_char(br);
+        br.mark(10);
+        int firstRead = br.read();   // read 'A'
 
-        assertEquals(first, second);
+        char expected = 'A';
+        char actual = p.unget_char(firstRead, br);
+
+        printTestResult("testUngetCharReturnA", "'A' with marked reader", expected, actual);
+        assertEquals(expected, actual);
+
+        int reread = br.read();
+        assertEquals((int) 'A', reread);
+    }
+
+    @Test
+    void testUngetCharReturnX() throws IOException {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader br = new BufferedReader(new StringReader("x"));
+
+        br.mark(10);
+        int firstRead = br.read();   // read 'x'
+
+        char expected = 'x';
+        char actual = p.unget_char(firstRead, br);
+
+        printTestResult("testUngetCharReturnX", "'x' with marked reader", expected, actual);
+        assertEquals(expected, actual);
+
+        int reread = br.read();
+        assertEquals((int) 'x', reread);
+    }
+
+    @Test
+    void testUngetCharResetIOException() {
+        Printtokens2 p = new Printtokens2();
+
+        Reader badReader = new Reader() {
+            @Override
+            public int read(char[] cbuf, int off, int len) throws IOException {
+                return -1;
+            }
+
+            @Override
+            public void close() throws IOException {
+            }
+        };
+
+        BufferedReader br = new BufferedReader(badReader) {
+            @Override
+            public void reset() throws IOException {
+                throw new IOException("forced reset failure");
+            }
+        };
+
+        char expected = 'B';
+        char actual = p.unget_char((int) 'B', br);
+
+        printTestResult("testUngetCharResetIOException", "reader that throws on reset()", expected, actual);
+        assertEquals(expected, actual);
     }
 
     // -------- get_token --------
