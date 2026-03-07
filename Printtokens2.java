@@ -256,7 +256,18 @@ public class Printtokens2 {
 	   {																		// 18
 	   System.out.print("numeric," + tok + ".\n");								// 19
 	   }																		// 20
+	
+	   // fault correction, missing case for str_constant
+	   if(type == str_constant)
+		{
+			System.out.print("string," + tok + ".\n");
+		}
 
+		// fault correction, missing case for comment
+		if(type == comment)
+		{
+			System.out.print("comment," + tok + ".\n");
+		}
 	 
 	 if(type==char_constant)													// 21
 	   {																		// 22
