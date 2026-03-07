@@ -369,6 +369,30 @@ public class Printtokens2Test {
     // -------- get_token --------
 
     @Test
+    void testGetTokenEmpty() {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader br = new BufferedReader(new StringReader(""));
+
+        String expected = null;
+        String actual = p.get_token(br);
+
+        printTestResult("testGetTokenEmpty", "reader containing \"\"", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetTokenWhitespaceOnly() {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader br = new BufferedReader(new StringReader("\t\n\r"));
+
+        String expected = null;
+        String actual = p.get_token(br);
+
+        printTestResult("testGetTokenWhitespaceOnly", "reader containing whitespace only", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void testGetTokenSimple() {
         Printtokens2 p = new Printtokens2();
         BufferedReader br = new BufferedReader(new StringReader("and"));
@@ -377,6 +401,78 @@ public class Printtokens2Test {
         String actual = p.get_token(br);
 
         printTestResult("testGetTokenSimple", "reader containing \"and\"", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetTokenStopsAtSpace() {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader br = new BufferedReader(new StringReader("abc xyz"));
+
+        String expected = "abc";
+        String actual = p.get_token(br);
+
+        printTestResult("testGetTokenStopsAtSpace", "reader containing \"abc xyz\"", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetTokenComment() {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader br = new BufferedReader(new StringReader(";comment text\n"));
+
+        String expected = ";comment text";
+        String actual = p.get_token(br);
+
+        printTestResult("testGetTokenComment", "reader containing \";comment text\\n\"", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetTokenString() {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader br = new BufferedReader(new StringReader("\"hello\""));
+
+        String expected = "\"hello\"";
+        String actual = p.get_token(br);
+
+        printTestResult("testGetTokenString", "reader containing \"\\\"hello\\\"\"", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetTokenSpecialSymbol() {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader br = new BufferedReader(new StringReader("("));
+
+        String expected = "(";
+        String actual = p.get_token(br);
+
+        printTestResult("testGetTokenSpecialSymbol", "reader containing \"(\"", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetTokenStopsAtSemicolon() {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader br = new BufferedReader(new StringReader("abc;rest"));
+
+        String expected = "abc";
+        String actual = p.get_token(br);
+
+        printTestResult("testGetTokenStopsAtSemicolon", "reader containing \"abc;rest\"", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetTokenNumeric() {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader br = new BufferedReader(new StringReader("123"));
+
+        String expected = "123";
+        String actual = p.get_token(br);
+
+        printTestResult("testGetTokenNumeric", "reader containing \"123\"", expected, actual);
         assertEquals(expected, actual);
     }
 
@@ -448,22 +544,74 @@ public class Printtokens2Test {
         assertNotNull(actual);
     }
 
+    // -------- open_token_stream --------
+
+    @Test
+    void testOpenTokenStreamNull() {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader actual = p.open_token_stream(null);
+
+        String expected = "non-null BufferedReader";
+        String actualStatus = (actual != null) ? "non-null BufferedReader" : "null";
+
+        printTestResult("testOpenTokenStreamNull", "null", expected, actualStatus);
+        assertNotNull(actual);
+    }
+
     @Test
     void testOpenTokenStreamEmpty() {
         Printtokens2 p = new Printtokens2();
         BufferedReader actual = p.open_token_stream("");
 
+        String expected = "non-null BufferedReader";
         String actualStatus = (actual != null) ? "non-null BufferedReader" : "null";
-        String expectedStatus = "non-null BufferedReader";
+
+        printTestResult("testOpenTokenStreamEmpty", "\"\"", expected, actualStatus);
+        assertNotNull(actual);
+    }
+
+    @Test
+    void testOpenTokenStreamExistingFile() throws IOException {
+        Printtokens2 p = new Printtokens2();
+
+        File tempFile = File.createTempFile("tokentest", ".txt");
+        FileWriter writer = new FileWriter(tempFile);
+        writer.write("hello");
+        writer.close();
+
+        BufferedReader actual = p.open_token_stream(tempFile.getAbsolutePath());
+
+        String expected = "non-null BufferedReader";
+        String actualStatus = (actual != null) ? "non-null BufferedReader" : "null";
 
         printTestResult(
-            "testOpenTokenStreamEmpty",
-            "\"\"",
-            expectedStatus,
+            "testOpenTokenStreamExistingFile",
+            tempFile.getAbsolutePath(),
+            expected,
             actualStatus
         );
 
         assertNotNull(actual);
+
+        tempFile.delete();
+    }
+
+    @Test
+    void testOpenTokenStreamMissingFile() {
+        Printtokens2 p = new Printtokens2();
+        BufferedReader actual = p.open_token_stream("missing_file.txt");
+
+        String expected = "null";
+        String actualStatus = (actual != null) ? "non-null BufferedReader" : "null";
+
+        printTestResult(
+            "testOpenTokenStreamMissingFile",
+            "missing_file.txt",
+            expected,
+            actualStatus
+        );
+
+        assertEquals(null, actual);
     }
 
     // -------- unget_error --------
