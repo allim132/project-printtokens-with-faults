@@ -209,20 +209,141 @@ public class Printtokens2Test {
 
     @Test
     void testIsTokenEndEOF() {
-        assertTrue(Printtokens2.is_token_end(0, -1));
+        int strComId = 0;
+        int res = -1;
+        boolean expected = true;
+        boolean actual = Printtokens2.is_token_end(strComId, res);
+
+        printTestResult("testIsTokenEndEOF", "(0, -1)", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testIsTokenEndStringQuote() {
+        int strComId = 1;
+        int res = (int) '"';
+        boolean expected = true;
+        boolean actual = Printtokens2.is_token_end(strComId, res);
+
+        printTestResult("testIsTokenEndStringQuote", "(1, '\"')", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testIsTokenEndStringNewline() {
+        int strComId = 1;
+        int res = (int) '\n';
+        boolean expected = true;
+        boolean actual = Printtokens2.is_token_end(strComId, res);
+
+        printTestResult("testIsTokenEndStringNewline", "(1, '\\n')", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testIsTokenEndStringNormalChar() {
+        int strComId = 1;
+        int res = (int) 'a';
+        boolean expected = false;
+        boolean actual = Printtokens2.is_token_end(strComId, res);
+
+        printTestResult("testIsTokenEndStringNormalChar", "(1, 'a')", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testIsTokenEndCommentNewline() {
+        int strComId = 2;
+        int res = (int) '\n';
+        boolean expected = true;
+        boolean actual = Printtokens2.is_token_end(strComId, res);
+
+        printTestResult("testIsTokenEndCommentNewline", "(2, '\\n')", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testIsTokenEndCommentCarriageReturn() {
+        int strComId = 2;
+        int res = (int) '\r';
+        boolean expected = true;
+        boolean actual = Printtokens2.is_token_end(strComId, res);
+
+        printTestResult("testIsTokenEndCommentCarriageReturn", "(2, '\\r')", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testIsTokenEndCommentTab() {
+        int strComId = 2;
+        int res = (int) '\t';
+        boolean expected = true;
+        boolean actual = Printtokens2.is_token_end(strComId, res);
+
+        printTestResult("testIsTokenEndCommentTab", "(2, '\\t')", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testIsTokenEndCommentNormalChar() {
+        int strComId = 2;
+        int res = (int) 'a';
+        boolean expected = false;
+        boolean actual = Printtokens2.is_token_end(strComId, res);
+
+        printTestResult("testIsTokenEndCommentNormalChar", "(2, 'a')", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testIsTokenEndNormalSpace() {
+        int strComId = 0;
+        int res = (int) ' ';
+        boolean expected = true;
+        boolean actual = Printtokens2.is_token_end(strComId, res);
+
+        printTestResult("testIsTokenEndNormalSpace", "(0, ' ')", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testIsTokenEndNormalNewline() {
+        int strComId = 0;
+        int res = (int) '\n';
+        boolean expected = true;
+        boolean actual = Printtokens2.is_token_end(strComId, res);
+
+        printTestResult("testIsTokenEndNormalNewline", "(0, '\\n')", expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testIsTokenEndNormalSemicolon() {
+        int strComId = 0;
+        int res = (int) ';';
+        boolean expected = true;
+        boolean actual = Printtokens2.is_token_end(strComId, res);
+
+        printTestResult("testIsTokenEndNormalSemicolon", "(0, ';')", expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     void testIsTokenEndNormalChar() {
-        assertFalse(Printtokens2.is_token_end(0, (int) 'a'));
-    }
+        int strComId = 0;
+        int res = (int) 'a';
+        boolean expected = false;
+        boolean actual = Printtokens2.is_token_end(strComId, res);
 
+        printTestResult("testIsTokenEndNormalChar", "(0, 'a')", expected, actual);
+        assertEquals(expected, actual);
+    }
     // -------- token_type --------
 
     @Test
     void testTokenTypeKeyword() {
-        String input = "and";
-        int expected = 1;
+        String input = "if";
+        int expected = Printtokens2.keyword;
         int actual = Printtokens2.token_type(input);
 
         printTestResult("testTokenTypeKeyword", input, expected, actual);
@@ -230,9 +351,19 @@ public class Printtokens2Test {
     }
 
     @Test
+    void testTokenTypeSpecSymbol() {
+        String input = "(";
+        int expected = Printtokens2.spec_symbol;
+        int actual = Printtokens2.token_type(input);
+
+        printTestResult("testTokenTypeSpecSymbol", input, expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void testTokenTypeIdentifier() {
-        String input = "abc";
-        int expected = 3;
+        String input = "myVar";
+        int expected = Printtokens2.identifier;
         int actual = Printtokens2.token_type(input);
 
         printTestResult("testTokenTypeIdentifier", input, expected, actual);
@@ -242,10 +373,50 @@ public class Printtokens2Test {
     @Test
     void testTokenTypeNumber() {
         String input = "123";
-        int expected = 41;
+        int expected = Printtokens2.num_constant;
         int actual = Printtokens2.token_type(input);
 
         printTestResult("testTokenTypeNumber", input, expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testTokenTypeString() {
+        String input = "\"hello\"";
+        int expected = Printtokens2.str_constant;
+        int actual = Printtokens2.token_type(input);
+
+        printTestResult("testTokenTypeString", input, expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testTokenTypeChar() {
+        String input = "#a";
+        int expected = Printtokens2.char_constant;
+        int actual = Printtokens2.token_type(input);
+
+        printTestResult("testTokenTypeChar", input, expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testTokenTypeComment() {
+        String input = ";comment";
+        int expected = Printtokens2.comment;
+        int actual = Printtokens2.token_type(input);
+
+        printTestResult("testTokenTypeComment", input, expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testTokenTypeError() {
+        String input = "@";
+        int expected = Printtokens2.error;
+        int actual = Printtokens2.token_type(input);
+
+        printTestResult("testTokenTypeError", input, expected, actual);
         assertEquals(expected, actual);
     }
 
@@ -475,9 +646,6 @@ public class Printtokens2Test {
         printTestResult("testGetTokenNumeric", "reader containing \"123\"", expected, actual);
         assertEquals(expected, actual);
     }
-
-
-    // -------- optional extra useful tests --------
 
     // -------- open_character_stream --------------
 
