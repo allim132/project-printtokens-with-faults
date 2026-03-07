@@ -278,7 +278,7 @@ public class Printtokens2 {
 
 	/* the code for tokens judgment function */
 
-	// 9
+	// 9 	possible issue: The function accesses ident.charAt(0) without checking whether ident is null or empty, which can cause runtime exceptions.
 	/*************************************/
 	/* NAME:	is_comment           */
 	/* INPUT: 	a token */
