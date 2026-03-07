@@ -299,12 +299,12 @@ public class Printtokens2 {
 	/*************************************/
 	static boolean is_keyword(String str)
 	{ 
-	if (str.equals("and") || str.equals("or") || str.equals("if") ||
-			 str.equals("xor")||str.equals("lambda")||str.equals("=>"))
-	      return true;
-	  else 
-	      return false;
-	}
+	if (str.equals("and") || str.equals("or") || str.equals("if") ||      // node 1
+			 str.equals("xor")||str.equals("lambda")||str.equals("=>"))   
+	      return true;                                                    // node 2
+	  else  
+	      return false;                                                   // node 3
+	}                                                                     // node 4
 	
 	/*************************************/
 	/* NAME:	is_char_constant     */
@@ -313,10 +313,10 @@ public class Printtokens2 {
 	/*************************************/
 	static boolean is_char_constant(String str)
 	{
-	  if (str.length() > 2 && str.charAt(0)=='#' && Character.isLetter(str.charAt(1)))  
-	     return true;
+	  if (str.length() == 2 && str.charAt(0)=='#' && Character.isLetter(str.charAt(1))) // changed > to ==     node 1
+	     return true;                                                                                       // node 2
 	  else  
-	     return false;
+	     return false;                                                                                      // node 3
 	}
 	
 	/*************************************/
@@ -324,25 +324,28 @@ public class Printtokens2 {
 	/* INPUT: 	a token */
 	/* OUTPUT:      a BOOLEAN value      */
 	/*************************************/
+     
 	static boolean is_num_constant(String str)
 	{
 	  int i=1;
-	  
-	  if ( Character.isDigit(str.charAt(0))) 
+        if (str == null || str.length() == 0)         
+            return false;                       // added this null/empty check to take case of empty or null cases  n
+	  if ( Character.isDigit(str.charAt(0)))         // node 1
 	    {
-	    while ( i <= str.length() && str.charAt(i) != '\0' )   /* until meet token end sign */ 
-	      {
-	       if(Character.isDigit(str.charAt(i+1)))	 
-	         i++;
-	       else
-	         return false;
-	      }                         /* end WHILE */
-	    return true;
+            // while (i <= str.length() && str.charAt(i) != '\0') is unsafe because str.charAt(i) will fail when i == str.length() and str.charAt(i+1) can also go out of bounds also Java strings do not use '\0' as an ending marker like C strings. Below is the corrected code.
+	        while (i < str.length())                    // node 4
+            {
+                if (Character.isDigit(str.charAt(i)))  // node 5
+                    i++;
+                else                
+                    return false;                      // node 7
+            }
+        return true;                                   // node 5
 	    }
 	  else
-	   return false;               /* other return FALSE */
+	   return false;               /* other return FALSE */ // node 8
 	}
-	
+
 	/*************************************/
 	/* NAME:	is_str_constant      */
 	/* INPUT: 	a token */
@@ -351,52 +354,56 @@ public class Printtokens2 {
 	static boolean is_str_constant(String str)
 	{
 	  int i=1;
-	 
-	  if ( str.charAt(0) =='"')
-	     { while (i < str.length() && str.charAt(0)!='\0')  /* until meet the token end sign */
-	         { if(str.charAt(i)=='"')
-	             return true;        /* meet the second '"'           */
-	           else
-	           i++;
-	         }               /* end WHILE */
-	     return true;	
-	    }
-	  else
-	    return false;       /* other return FALSE */
-	}
+      if (str == null || str.length() == 0)         
+        return false;                            // this takes care of empty string   
+
+      if (str.charAt(0) == '"') // fixed the format modified    // node 1
+        {
+            while (i < str.length())                           // node 3
+            {
+                if (str.charAt(i) == '"' && i == str.length() - 1)    // node 4
+                    return true;                                      // node 7
+                else
+                    i++;
+            }
+            return false;                                  // node 6
+        }
+        else
+            return false;                      // node 2
+    }
 	
 	/*************************************/
 	/* NAME:	is_identifier         */
 	/* INPUT: 	a token */
 	/* OUTPUT:      a BOOLEAN value      */
-	/*************************************/
+	/*************************************/ // this code has no issues in it
 	static boolean is_identifier(String str)
 	{
-	  int i=0; 
+	  int i=0;                                               // node 1
 
-	  if ( Character.isLetter(str.charAt(0)) ) 
+	  if ( Character.isLetter(str.charAt(0)) )              // node 2
 	     {
-	        while(i < str.length() && str.charAt(i) !='\0' )   /* unti meet the end token sign */
+	        while(i < str.length())   /* unti meet the end token sign */ // what it had before was for c not java  // node 4
 	           { 
 	            if(Character.isLetter(str.charAt(i)) || Character.isDigit(str.charAt(i)))   
 	               i++;
 	            else
-	               return false;
+	               return false;                          // node 6 but also node 7
 	           }      /* end WHILE */
-	     return false; 
+	     return true; // changed to true from false             // node 5
 	     }
 	  else
-	     return true; 
-	}
+	     return false; // changed to false from true          // node 3
+	} 
 	
 	/******************************************/
 	/* NAME:	unget_error               */
 	/* INPUT:      a BufferedReader */
 	/* OUTPUT: 	print error message       */
-	/******************************************/
+	/******************************************/ // this code was also correct
 	static void unget_error(BufferedReader br)
 	{
-		System.out.print("It can not get charcter\n");
+		System.out.print("It can not get character\n");            // node 1
 	}
 	
 	/*************************************************/
@@ -407,39 +414,39 @@ public class Printtokens2 {
 	/*************************************************/
 	static void print_spec_symbol(String str)
 	{
-	    if      (str.equals("{")) 
+	    if      (str.equals("(")) // changed {  to (    // node 1
 	    {
 	         
 	             System.out.print("lparen.\n");
-	             return;
+	             return;                                // node 2
 	    } 
-	    if (str.equals(")"))
+	    if (str.equals(")"))                           // node 3
 	    {
 	      
 	             System.out.print("rparen.\n");
-	             return;
+	             return;                               // node 4
 	    }
-	    if (str.equals("["))
+	    if (str.equals("["))                           // node 5
 	    {
 	             System.out.print("lsquare.\n");
-	             return;
+	             return;                                // node 6
 	    }
-	    if (str.equals("]"))
+	    if (str.equals("]"))                            // node 7
 	    {
 	       
 	             System.out.print("rsquare.\n");
-	             return;
+	             return;                               // node 8
 	    }
-	    if (str.equals("'"))
+	    if (str.equals("'"))                           // node 9
 	    {
 	             System.out.print("quote.\n");
-	             return;
+	             return;                                // node 10
 	    }
-	    if (str.equals("`"))
+	    if (str.equals("`"))                           // node 11
 	    {
 	 
 	             System.out.print("bquote.\n");
-	             return;
+	             return;                               // node 12
 	    }
 	    
 	    
@@ -449,52 +456,56 @@ public class Printtokens2 {
 	/* NAME:        is_spec_symbol       */
 	/* INPUT:       a token */
 	/* OUTPUT:      a BOOLEAN value      */
-	/*************************************/
+	/*************************************/ // this method is correct as well
 	static boolean is_spec_symbol(char c)
 	{
-	    if (c == '(')
-	    {  
-	        return true;
+	    if (c == '(')             // node 1                      
+ 	    {  
+	        return true;          // node 2
 	    }
-	    if (c == ')')
+	    if (c == ')')             // node 3
 	    {
-	        return true;
+	        return true;          // node 4
 	    }
-	    if (c == '[')
+	    if (c == '[')              // node 5
 	    {
-	        return true;
+	        return true;          // node 6
 	    }
-	    if (c == ']')
+	    if (c == ']')             // node 7
 	    {
-	        return true;
+	        return true;         // node 8
 	    }
-	    if (c == '/') 
+	    if (c == '/')                // node 9
 	    {
-	        return true;
+	        return true;           // node 10
 	    }
-	    if (c == '`')
+	    if (c == '`')              // node 11
 	    {
-	        return true;
+	        return true;          // node 12
 	    }
-	    if (c == ',')
+	    if (c == ',')              // node 13
 	    {
-	        return true;
+	        return true;            // node 14
 	    }
-	    return false;     /* others return FALSE */
+	    return false;     /* others return FALSE */        // node 15
 	}
 	
 	public static void main(String[] args) throws IOException {
-		String fname = null;
+		String fname = null;                     
 		if (args.length == 0) {	/* if not given filename,take as '""' */
-			fname = new String();
+			fname = null;                    // ****************************************************** fixed this it was fname= new string()
 		} else if (args.length == 1) {
-			fname = args[1]; 
+			fname = args[0];           //*********************************************args[1] */
 		} else {
 			System.out.print("Error!,please give the token stream\n");
 			System.exit(0);
 		}
 		Printtokens2 t = new Printtokens2();
 		BufferedReader br = t.open_token_stream(fname);	/* open token stream */
+        if (br == null) {
+            System.out.print("Error opening input stream\n");
+            System.exit(0);
+        }
 		String tok = t.get_token(br);
 		while (tok != null) {	/* take one token each time until eof */
 			t.print_token(tok);
