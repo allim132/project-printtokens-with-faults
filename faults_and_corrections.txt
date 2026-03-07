@@ -1,0 +1,47 @@
+Function 1: "open_character_stream"
+fault correction: function should return br.
+correction: return br;                                                             // 15 Note: fault correction: should return br
+
+Function 2: "get_char"
+fault correction: on error state, does not actually return -1 on EOF / IOException path.
+correction: return -1;                                                             // 7.5, code correction, returns -1 on IOException
+
+Function 3: "unget_char"
+fault correction: does not actually output a character.
+correction: return (char)ch;                                                      // 7 code correction applied, now returns char
+
+Function 4: "open_token_stream"
+fault correction: correct null comparison and add empty-string check.
+correction: if(fname == null || fname.isEmpty())                                  // 4 fault correction applied, correct null comparison and empty correct empty check
+
+Function 5: "get_token"
+fault correction: remove EOF pushback because -1 implies EOF and the previous character should not be ungotten.
+correction: //unget_char(ch,br);                                                  // 26 fault correction: -1 implies that we've reach EOF, but we still get the char, thus we must remove this code
+
+Function 5: "get_token"
+fault correction: do not put back EOF on token stream because chars cannot store EOF.
+correction: //unget_char(ch,br);        /* then put back eof on token_stream */   // 40 fault correction: -1 implies EOF, and ch is a char and chars cannot store EOF
+
+Function 5: "get_token"
+fault correction: remove unused variables.
+correction: // int i=0,j;                                                         // 3 What are these used for? fault correction
+
+Function 6: "is_token_end"
+fault correction: single | changed to logical || in string-token termination check.
+correction: { if(ch=='"' || ch=='\n' || ch == '\r')                             // 6 fault correction: single |, changed to ||
+
+Function 7: "token_type"
+fault correction: no correction applied in the provided source.
+correction: no correction applied.
+
+Function 8: "print_token"
+fault correction: missing case for str_constant.
+correction: if(type == str_constant)                                              // fault correction, missing case for str_constant
+
+Function 8: "print_token"
+fault correction: missing case for comment.
+correction: if(type == comment)                                                   // fault correction, missing case for comment
+
+Function 9: "is_comment"
+fault correction: possible issue noted — function accesses ident.charAt(0) without checking whether ident is null or empty, which can cause runtime exceptions.
+correction: no correction applied in the provided source.
